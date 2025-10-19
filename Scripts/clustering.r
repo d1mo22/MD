@@ -1,6 +1,7 @@
 #Retrieve the data saved AFTER the profiling practice...... this means data already cleaned
 
-setwd("/Users/davidmorais/Desktop/MD")
+# Set working directory
+setwd("//wsl.localhost/Ubuntu-24.04/home/david/MD")
 dd <- read.csv("hotel_sample_5000.csv", sep=",", dec=".");
 names(dd)
 dim(dd)
@@ -105,16 +106,16 @@ c1 <- cutree(h1,nc)
 
 c1[1:20]
 
-nc = 5
+nc = 6
 
-c5 <- cutree(h1,nc)
+c6 <- cutree(h1,nc)
 
-c5[1:20]
+c6[1:20]
 
 
 table(c1)
-table(c5)
-table(c1,c5)
+table(c6)
+table(c1,c6)
 
 
 cdg <- aggregate(as.data.frame(dcon),list(c1),mean)
@@ -123,7 +124,6 @@ cdg
 plot(cdg[,1], cdg[,7])
 
 # LETS SEE THE PARTITION VISUALLY
-
 
 plot(Edad,Estalvi,col=c1,main="Clustering of credit data in 3 classes")
 legend("topright",c("class1","class2","class3"),pch=1,col=c(1:3))
@@ -173,7 +173,7 @@ h1 <- hclust(distMatrix,method="ward.D")  # NOTICE THE COST
 
 plot(h1)
 
-c2 <- cutree(h1,4)
+c2 <- cutree(h1,6)
 
 #class sizes 
 table(c2)

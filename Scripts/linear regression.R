@@ -23,7 +23,7 @@ reg_full <- lm(adr ~ hotel + lead_time + year + month + week + day +
                  meal  + market_seg + channel + repeated +
                  pre_cancel + pre_bcn + rroom_type + assroom_type + changes +
                  deposit_type + agent + days_wait + customer_type +
-                 rcar_parking_spaces + ts_requests + r_status,
+                 rcar_parking_spaces + ts_requests + r_status + country,
                data = dd)
 
 # Summary of the full model
@@ -50,3 +50,4 @@ reg3$terms
 plot(Sepal.Width, Petal.Width, col=Species)
 # and without closing the plot window 
 lines(Sepal.Width, reg3$fitted.values, col="blue")
+

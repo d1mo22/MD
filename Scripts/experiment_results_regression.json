@@ -1,0 +1,173 @@
+[
+  {
+    "architecture": [
+      64,
+      32
+    ],
+    "activation": "relu",
+    "val_loss": 3658.703369140625,
+    "val_mae": 44.89486312866211,
+    "test_loss": 3833.103515625,
+    "test_mae": 44.745304107666016
+  },
+  {
+    "architecture": [
+      64,
+      32
+    ],
+    "activation": "tanh",
+    "val_loss": 11166.7744140625,
+    "val_mae": 94.85574340820312,
+    "test_loss": 11247.8125,
+    "test_mae": 93.51349639892578
+  },
+  {
+    "architecture": [
+      64,
+      32
+    ],
+    "activation": "elu",
+    "val_loss": 2311.59423828125,
+    "val_mae": 34.96201705932617,
+    "test_loss": 2553.203369140625,
+    "test_mae": 35.970035552978516
+  },
+  {
+    "architecture": [
+      128,
+      64
+    ],
+    "activation": "relu",
+    "val_loss": 1827.9012451171875,
+    "val_mae": 32.31060791015625,
+    "test_loss": 2035.944580078125,
+    "test_mae": 33.060916900634766
+  },
+  {
+    "architecture": [
+      128,
+      64
+    ],
+    "activation": "tanh",
+    "val_loss": 9897.8525390625,
+    "val_mae": 88.08206939697266,
+    "test_loss": 9996.375,
+    "test_mae": 86.68329620361328
+  },
+  {
+    "architecture": [
+      128,
+      64
+    ],
+    "activation": "elu",
+    "val_loss": 1954.21484375,
+    "val_mae": 33.83613204956055,
+    "test_loss": 2196.013671875,
+    "test_mae": 34.982906341552734
+  },
+  {
+    "architecture": [
+      128,
+      64,
+      32
+    ],
+    "activation": "relu",
+    "val_loss": 1593.8717041015625,
+    "val_mae": 30.224422454833984,
+    "test_loss": 1752.8533935546875,
+    "test_mae": 30.453369140625
+  },
+  {
+    "architecture": [
+      128,
+      64,
+      32
+    ],
+    "activation": "tanh",
+    "val_loss": 11000.7763671875,
+    "val_mae": 93.99726867675781,
+    "test_loss": 11084.263671875,
+    "test_mae": 92.64875793457031
+  },
+  {
+    "architecture": [
+      128,
+      64,
+      32
+    ],
+    "activation": "elu",
+    "val_loss": 1710.701416015625,
+    "val_mae": 31.102537155151367,
+    "test_loss": 1889.6700439453125,
+    "test_mae": 31.52042007446289
+  },
+  {
+    "architecture": [
+      256,
+      128
+    ],
+    "activation": "relu",
+    "val_loss": 1514.0748291015625,
+    "val_mae": 28.51919937133789,
+    "test_loss": 1663.6087646484375,
+    "test_mae": 28.59902000427246
+  },
+  {
+    "architecture": [
+      256,
+      128
+    ],
+    "activation": "tanh",
+    "val_loss": 8022.185546875,
+    "val_mae": 76.96015930175781,
+    "test_loss": 8149.18994140625,
+    "test_mae": 75.47067260742188
+  },
+  {
+    "architecture": [
+      256,
+      128
+    ],
+    "activation": "elu",
+    "val_loss": 1635.137451171875,
+    "val_mae": 30.721099853515625,
+    "test_loss": 1806.0213623046875,
+    "test_mae": 30.8994140625
+  },
+  {
+    "architecture": [
+      256,
+      128,
+      64
+    ],
+    "activation": "relu",
+    "val_loss": 1319.6771240234375,
+    "val_mae": 27.764144897460938,
+    "test_loss": 1429.30859375,
+    "test_mae": 27.8918399810791
+  },
+  {
+    "architecture": [
+      256,
+      128,
+      64
+    ],
+    "activation": "tanh",
+    "val_loss": 10031.0380859375,
+    "val_mae": 88.81695556640625,
+    "test_loss": 10127.783203125,
+    "test_mae": 87.42475891113281
+  },
+  {
+    "architecture": [
+      256,
+      128,
+      64
+    ],
+    "activation": "elu",
+    "val_loss": 1433.65478515625,
+    "val_mae": 28.29365348815918,
+    "test_loss": 1569.361083984375,
+    "test_mae": 28.20579719543457
+  }
+]

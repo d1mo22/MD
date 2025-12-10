@@ -40,7 +40,7 @@ library(rpart)
 
 
 p1 <- rpart(canceled ~ lead_time + weekend_nights + week_nights + adults +
-              children + babies + meal + country + market_seg + channel +
+              children + babies + meal + market_seg + channel +
               repeated + pre_cancel + pre_bcn + rroom_type + assroom_type +
               changes + deposit_type + agent + days_wait + customer_type +
               adr + rcar_parking_spaces + ts_requests,
@@ -64,7 +64,7 @@ t2
 ```{r}
 
 r1 <- rpart(adr ~ lead_time + weekend_nights + week_nights + adults +
-              children + babies + meal + country + market_seg + channel +
+              children + babies + meal + market_seg + channel +
               repeated + pre_cancel + pre_bcn + rroom_type + assroom_type +
               changes + deposit_type + agent + days_wait + customer_type +
               rcar_parking_spaces + ts_requests,

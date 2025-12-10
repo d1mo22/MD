@@ -1,0 +1,237 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+library(ggplot2)
+install.packages("gridExtra")   # install the package
+library(gridExtra)
+setwd("C:/Users/louis/Downloads/")
+df <- read.csv("hotel_sample_5000(4).csv", header=T)
+print(df)
+summary(df)
+sapply(df, function(x) length(unique(x[!is.na(x)])))
+colSums(is.na(df))
+sum(duplicated(df))
+df$country <- factor(df$country)
+
+colnames(df)
+
+
+```
+
+
+```{r}
+set.seed(2004)
+
+df$canceled <- as.factor(df$canceled)
+df$rroom_type <- as.factor(df$rroom_type)
+df$market_seg <- as.factor(df$market_seg)
+df$deposit_type <- as.factor(df$deposit_type)
+df$assroom_type <- as.factor(df$assroom_type)
+training <- sample(1:nrow(df), round(2*nrow(df)/3))
+library(rpart)
+
+
+
+p1 <- rpart(canceled ~ lead_time + weekend_nights + week_nights + adults +
+              children + babies + meal + country + market_seg + channel +
+              repeated + pre_cancel + pre_bcn + rroom_type + assroom_type +
+              changes + deposit_type + agent + days_wait + customer_type +
+              adr + rcar_parking_spaces + ts_requests,
+            data = df[training,],
+            method = "class",
+            parms = list(split = "gini"))
+plot(p1)
+text(p1, use.n = TRUE, cex = 0.7)
+p1_train <- predict(p1, df[training,])
+p1p <- ifelse(p1_train[,2] >= 0.5, 1, 0)
+t1 <- table(df$canceled[training], p1p)
+t1
+( t1[1,1] + t1[2,2] ) / sum(t1)
+p1_test <- predict(p1, df[-training,])
+p1t <- ifelse(p1_test[,2] >= 0.5, 1, 0)
+t2 <- table(df$canceled[-training], p1t)
+t2
+( t2[1,1] + t2[2,2] ) / sum(t2)
+```
+
+```{r}
+
+r1 <- rpart(adr ~ lead_time + weekend_nights + week_nights + adults +
+              children + babies + meal + country + market_seg + channel +
+              repeated + pre_cancel + pre_bcn + rroom_type + assroom_type +
+              changes + deposit_type + agent + days_wait + customer_type +
+              rcar_parking_spaces + ts_requests,
+            data = df[training,],
+            method = "anova")
+plot(r1)
+text(r1, use.n = TRUE)
+r1_pred <- predict(r1, df[-training,])
+head(r1_pred)
+
+# True values
+y_true <- df$adr[-training]
+# Predictions
+y_pred <- r1_pred
+
+# Mean Squared Error
+MSE <- mean((y_true - y_pred)^2)
+
+# Root Mean Squared Error
+RMSE <- sqrt(MSE)
+
+# Mean Absolute Errorq
+MAE <- mean(abs(y_true - y_pred))
+
+MSE
+RMSE
+MAE
+```
+
+```{r}
+library(randomForest)
+train_data <- df[training, ]     # training data
+test_data  <- df[-training, ]    # remaining data for testing
+train_data$canceled <- as.factor(train_data$canceled)
+test_data$canceled  <- as.factor(test_data$canceled)
+
+# Random Forest Classification for 'canceled'
+rf_class <- randomForest(canceled ~ lead_time + weekend_nights + week_nights + adults +
+                     children + babies + meal + market_seg + channel +
+                     repeated + pre_cancel + pre_bcn + rroom_type + assroom_type +
+                     changes + deposit_type + days_wait + customer_type +
+                     adr + rcar_parking_spaces + ts_requests,
+                     data = train_data,
+                         ntree = 500,        # Changed from 'num.trees' to 'ntree'
+                         importance = TRUE,  # Changed from 'impurity' to TRUE
+                         # probability = TRUE is not needed here; 
+                         # it calculates probs automatically for factors
+                         )
+
+# 3. Check the results
+print(rf_class)
+
+# Random Forest Regression for 'adr' (if you still want regression)
+rf_reg <- randomForest(adr ~ lead_time + weekend_nights + week_nights + adults +
+                   children + babies + meal + market_seg + channel +
+                   repeated + pre_cancel + pre_bcn + rroom_type + assroom_type +
+                   changes + deposit_type + days_wait + customer_type +
+                   rcar_parking_spaces + ts_requests,
+                 data = train_data,
+                 ntree = 500,
+                 importance = TRUE)
+
+# View the model
+
+print(rf_class)
+
+# Predictions
+
+pred_class <- predict(rf_class, test_data)
+
+# Confusion matrix
+
+table(test_data$canceled, pred_class)
+
+# Accuracy
+
+mean(pred_class == test_data$canceled)
+
+# View the model
+
+print(rf_reg)
+
+# Predictions
+
+pred_reg <- predict(rf_reg, test_data)
+
+# Evaluation metrics
+
+MSE <- mean((test_data$adr - pred_reg)^2)
+RMSE <- sqrt(MSE)
+MAE <- mean(abs(test_data$adr - pred_reg))
+
+MSE
+RMSE
+MAE
+
+```
+
+```{r}
+# --- Visualizing Feature Importance ---
+
+# 1. For the Classification Model (Cancellations)
+print("Importance for Cancellation Model:")
+varImpPlot(rf_class, main = "Variable Importance - Canceled")
+
+
+# 2. For the Regression Model (ADR/Price)
+print("Importance for ADR Model:")
+varImpPlot(rf_reg, main = "Variable Importance - ADR")
+
+```
+
+
+```{r}
+
+# --- PRUNING THE CLASSIFICATION TREE (p1) ---
+
+# 1. Visualize the Cross-Validation results to see where error is lowest
+printcp(p1)   # Prints the table
+plotcp(p1)    # Plots the error vs tree size
+
+# 2. Automatically select the best CP (lowest xerror)
+best_cp_p1 <- p1$cptable[which.min(p1$cptable[,"xerror"]), "CP"]
+print(paste("Best CP for p1 is:", best_cp_p1))
+
+# 3. Prune the tree using that CP
+p1_pruned <- prune(p1, cp = best_cp_p1)
+
+# 4. Plot the new, pruned tree
+# using rpart.plot is better, but here is the standard plot you used:
+plot(p1_pruned, main = "Pruned Classification Tree (Canceled)")
+text(p1_pruned, use.n = TRUE, cex = 0.7)
+
+# 5. Check accuracy of the PRUNED tree on Test Data
+p1_pruned_pred <- predict(p1_pruned, df[-training,], type = "class") # type="class" gives 0/1 directly
+t_pruned <- table(Predicted = p1_pruned_pred, Actual = df$canceled[-training])
+print(t_pruned)
+
+# Calculate Accuracy
+accuracy_p1 <- sum(diag(t_pruned)) / sum(t_pruned)
+print(paste("Accuracy of Pruned Tree:", accuracy_p1))
+
+# --- PRUNING THE REGRESSION TREE (r1) ---
+
+# 1. Visualize results
+printcp(r1)
+plotcp(r1)
+
+# 2. Automatically select the best CP
+best_cp_r1 <- r1$cptable[which.min(r1$cptable[,"xerror"]), "CP"]
+print(paste("Best CP for r1 is:", best_cp_r1))
+
+# 3. Prune the tree
+r1_pruned <- prune(r1, cp = best_cp_r1)
+
+# 4. Plot the pruned tree
+plot(r1_pruned, main = "Pruned Regression Tree (ADR)")
+text(r1_pruned, use.n = TRUE, cex = 0.7)
+
+# 5. Check Error (RMSE) of the PRUNED tree
+r1_pruned_pred <- predict(r1_pruned, df[-training,])
+RMSE_pruned <- sqrt(mean((df$adr[-training] - r1_pruned_pred)^2))
+
+print(paste("RMSE of Pruned Tree:", RMSE_pruned))
+```
+Adf a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.

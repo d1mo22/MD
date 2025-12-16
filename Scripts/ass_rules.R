@@ -1,10 +1,3 @@
-# ==============================================================================
-#                 BASKET MARKET ANALYSIS: ASSOCIATION RULES
-#
-# Author/(s):    K. Gibert, X. Angerri & S.Ramirez, 2025 (c) IDEAI
-# Adaptación:    Variable canceled (Max, 2025)
-# ==============================================================================
-
 # 1. Load the packages ---------------------------------------------------------
 library(arules)
 library(arulesViz)  
@@ -12,7 +5,7 @@ library(rCBA)
 
 # 2. Load the databases --------------------------------------------------------
 ## 2.2 Hotels ------------------------------------------------------------------
-setwd("C:/Users/max.estrade/Downloads")
+setwd("C:/Users/maxes/Desktop/MD/bivariate")
 dd <- read.table("hotel_sample_5000.csv", header = TRUE, stringsAsFactors = TRUE, sep = ",")
 dd <- subset(dd, select = -r_status)
 
@@ -158,3 +151,4 @@ plot(sort(eclatTransrules, by = "lift"), method = "graph",
 plot(eclatTransrules, method = "graph", measure = "lift",
      shading = "confidence", engine = "htmlwidget", network = TRUE,
      itemCol = "pink", max = 200)
+
